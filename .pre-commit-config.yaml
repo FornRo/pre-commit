@@ -1,0 +1,84 @@
+exclude: \.(ts|jsx|tsx|less|rst|po|pot|htm|txt|csv)$
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-merge-conflict
+        description: Check for files that contain merge conflict strings.
+        language_version: python3
+
+      - id: trailing-whitespace
+        description: Trims trailing whitespace.
+        args: [--markdown-linebreak-ext=md]
+        language_version: python3
+
+      - id: mixed-line-ending
+        description: Replaces or checks mixed line ending.
+        args: [--fix=lf]
+        exclude: make.bat
+        language_version: python3
+
+      - id: fix-byte-order-marker
+        description: Removes UTF-8 BOM if present, generally a Windows problem.
+        language_version: python3
+
+      - id: end-of-file-fixer
+        description: Makes sure files end in a newline and only a newline.
+#        exclude: tests/fake_.*\.key
+        language_version: python3
+
+      - id: check-ast
+        description: Simply check whether files parse as valid python.
+        language_version: python3
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ['--settings-path=./pyproject.toml']
+
+  - repo: https://github.com/ambv/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        args: ['--config=./pyproject.toml']
+
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        name: Remove unused variables and imports
+        language: python
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --ignore-init-module-imports
+        files: \.py$
+#        exclude: backup_upload_google_drive/models/db_backup.py
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: ['--config=./.flake8']
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: 'v3.0.0-alpha.9-for-vscode'
+    hooks:
+      - id: prettier
+        args: ['--config', './.prettierrc.toml']
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.1.2
+    hooks:
+      - id: prettier
+        name: prettier + plugin-xml
+        additional_dependencies:
+          - 'prettier@2.1.2'
+          - '@prettier/plugin-xml@0.12.0'
+        args:
+          - --plugin=@prettier/plugin-xml
+          - --print-width
+          - '120'
+        files: \.(xml)$
